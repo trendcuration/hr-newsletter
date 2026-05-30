@@ -1,0 +1,18 @@
+# API 키 / 비밀값 포함 파일
+.claude/settings.local.json
+run_weekly.ps1
+
+# 미리보기 HTML (생성물)
+preview_*.html
+sample_preview.html
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# 환경변수 파일
+.env
+*.env
