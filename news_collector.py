@@ -122,8 +122,8 @@ def collect_all_news() -> tuple[list[dict], dict]:
 
     for i, topic in enumerate(NEWS_TOPICS):
         if i > 0:
-            print(f"  (rate limit 방지 대기 30초...)")
-            time.sleep(30)
+            print(f"  (rate limit 방지 대기 75초...)")
+            time.sleep(75)
         print(f"  [{topic['title']}] 수집 중...")
         try:
             result = collect_news_for_topic(client, topic)
@@ -139,8 +139,8 @@ def collect_all_news() -> tuple[list[dict], dict]:
                 "usage": {"input_tokens": 0, "output_tokens": 0},
             })
 
-    print(f"  (rate limit 방지 대기 30초...)")
-    time.sleep(30)
+    print(f"  (rate limit 방지 대기 75초...)")
+    time.sleep(75)
     print(f"  [{TECH_TOPIC['title']}] 수집 중...")
     try:
         tech_result = collect_tech_highlight(client)
