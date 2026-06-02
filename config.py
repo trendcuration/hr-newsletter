@@ -26,7 +26,6 @@ NEWS_TOPICS = [
         "queries": [
             "US corporate restructuring layoffs 2025",
             "기업 구조조정 조직개편 한국 2025",
-            "日本 企業 組織改革 リストラ 2025",
         ],
     },
     {
@@ -36,7 +35,6 @@ NEWS_TOPICS = [
         "queries": [
             "US executive compensation salary trends 2025",
             "성과평가 보상체계 임금 한국 2025",
-            "日本 賃金 給与 人事評価 2025",
         ],
     },
     {
@@ -46,7 +44,6 @@ NEWS_TOPICS = [
         "queries": [
             "US talent management hiring workforce 2025",
             "채용 인력운영 리텐션 한국 2025",
-            "日本 採用 人材管理 2025",
         ],
     },
     {
@@ -56,7 +53,6 @@ NEWS_TOPICS = [
         "queries": [
             "US labor union strike employment law 2025",
             "노사관계 파업 단체교섭 한국 2025",
-            "日本 労働組合 労使関係 2025",
         ],
     },
     {
@@ -66,7 +62,6 @@ NEWS_TOPICS = [
         "queries": [
             "US AI human resources recruiting automation 2025",
             "HR AI 인사관리 자동화 한국 2025",
-            "日本 AI 人事 採用 自動化 2025",
         ],
     },
 ]
