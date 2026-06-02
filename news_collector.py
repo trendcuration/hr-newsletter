@@ -12,8 +12,11 @@ def collect_news_for_topic(client: anthropic.Anthropic, topic: dict) -> dict:
 
     prompt = f"""당신은 HR 전문 뉴스레터 에디터입니다.
 
-아래 검색어들을 사용해 최근 1주일({date_range}) 동안의 국내외 HR 뉴스를 검색해주세요.
+오늘 날짜는 {today.strftime('%Y년 %m월 %d일')}입니다.
+아래 검색어들을 사용해 정확히 {date_range} 사이에 발행된 국내외 HR 뉴스만 검색해주세요.
 한국(국내 기업·정부·노동부 동향 포함)과 미국·유럽(글로벌 기업 사례) 기사를 균형 있게 수집해주세요.
+
+⚠️ 중요: {week_ago.strftime('%Y년')} 이전 기사, 특히 2025년 이전 기사는 절대 포함하지 마세요. 반드시 {date_range} 기간 내 기사만 포함하세요.
 
 검색어:
 {queries_text}
@@ -67,8 +70,11 @@ def collect_tech_highlight(client: anthropic.Anthropic) -> dict:
 
     prompt = f"""당신은 반도체/기술 전문 뉴스레터 에디터입니다.
 
-아래 검색어들을 사용해 최근 1주일({date_range}) 동안 반도체 업계에서 가장 주목받은 기술 뉴스를 검색해주세요.
+오늘 날짜는 {today.strftime('%Y년 %m월 %d일')}입니다.
+아래 검색어들을 사용해 정확히 {date_range} 사이에 발행된 반도체 기술 뉴스만 검색해주세요.
 삼성전자·SK하이닉스 등 한국 기업 관련 국내 기사와 TSMC·Intel·NVIDIA 등 해외 기사를 균형 있게 수집해주세요.
+
+⚠️ 중요: {week_ago.strftime('%Y년')} 이전 기사, 특히 2025년 이전 기사는 절대 포함하지 마세요. 반드시 {date_range} 기간 내 기사만 포함하세요.
 
 검색어:
 {queries_text}

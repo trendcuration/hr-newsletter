@@ -148,40 +148,40 @@ def build_email_html(news_results: list[dict], tech_result: dict | None = None) 
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', '맑은 고딕', sans-serif;
     background: #f0f2f5;
     margin: 0;
-    padding: 20px 0;
+    padding: 12px 0;
     color: #333;
   }}
   .container {{
-    max-width: 700px;
+    max-width: 680px;
     margin: 0 auto;
     background: #ffffff;
-    border-radius: 16px;
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
   }}
 
   /* ── 헤더 ── */
   .header {{
     background: linear-gradient(135deg, #0d1b2a 0%, #1b2d45 50%, #1a3a5c 100%);
     color: white;
-    padding: 40px 44px 32px;
+    padding: 24px 24px 20px;
     text-align: center;
   }}
   .header-label {{
-    font-size: 11px;
-    letter-spacing: 4px;
+    font-size: 10px;
+    letter-spacing: 3px;
     text-transform: uppercase;
     color: #7eb8e8;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
   }}
   .header-title {{
-    font-size: 30px;
+    font-size: 22px;
     font-weight: 800;
     letter-spacing: -0.5px;
-    margin: 0 0 6px;
+    margin: 0 0 4px;
   }}
   .header-sub {{
-    font-size: 13px;
+    font-size: 11px;
     color: #90cdf4;
     margin: 0;
   }}
@@ -190,23 +190,23 @@ def build_email_html(news_results: list[dict], tech_result: dict | None = None) 
     background: rgba(255,255,255,0.12);
     border: 1px solid rgba(255,255,255,0.25);
     border-radius: 20px;
-    padding: 5px 18px;
-    font-size: 12px;
-    margin-top: 18px;
-    letter-spacing: 0.5px;
+    padding: 3px 14px;
+    font-size: 11px;
+    margin-top: 12px;
+    letter-spacing: 0.3px;
   }}
 
   /* ── 본문 래퍼 ── */
   .body {{
-    padding: 32px 40px 40px;
+    padding: 16px 14px 24px;
   }}
   .intro {{
     background: #eef5ff;
-    border-left: 4px solid #3182ce;
-    padding: 14px 18px;
-    border-radius: 0 8px 8px 0;
-    margin-bottom: 20px;
-    font-size: 14px;
+    border-left: 3px solid #3182ce;
+    padding: 10px 12px;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 14px;
+    font-size: 12px;
     color: #2c5282;
     line-height: 1.6;
   }}
@@ -215,120 +215,118 @@ def build_email_html(news_results: list[dict], tech_result: dict | None = None) 
   .toc {{
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 32px;
-    padding: 16px 18px;
+    gap: 6px;
+    margin-bottom: 16px;
+    padding: 10px 12px;
     background: #f8fafc;
     border: 1px solid #e2e8f0;
-    border-radius: 10px;
+    border-radius: 8px;
   }}
   .toc-item {{
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    font-size: 12px;
+    gap: 4px;
+    font-size: 11px;
     color: #4a5568;
     text-decoration: none;
     background: #fff;
     border: 1px solid #e2e8f0;
     border-radius: 20px;
-    padding: 4px 12px;
-    transition: background 0.15s;
+    padding: 3px 10px;
   }}
-  .toc-item:hover {{ background: #ebf4ff; color: #2b6cb0; }}
   .toc-tech {{ border-color: #7b68ee; color: #5a4fcf; }}
-  .toc-emoji {{ font-size: 13px; }}
+  .toc-emoji {{ font-size: 12px; }}
 
   /* ── 토픽 섹션 ── */
   .topic-section {{
-    margin-bottom: 28px;
+    margin-bottom: 14px;
     border: 1px solid #e2e8f0;
-    border-radius: 12px;
+    border-radius: 10px;
     overflow: hidden;
   }}
   .topic-header {{
     background: #f8fafc;
-    padding: 14px 22px;
+    padding: 9px 14px;
     border-bottom: 1px solid #e2e8f0;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
   }}
-  .topic-emoji {{ font-size: 20px; }}
+  .topic-emoji {{ font-size: 16px; }}
   .topic-title {{
-    font-size: 16px;
+    font-size: 13px;
     font-weight: 700;
     color: #1a202c;
-    letter-spacing: -0.3px;
+    letter-spacing: -0.2px;
   }}
-  .topic-content {{ padding: 16px 20px 20px; }}
+  .topic-content {{ padding: 10px 12px 12px; }}
 
   /* ── 기사 카드 ── */
   .article-card {{
     background: #fafbfc;
     border: 1px solid #e8edf2;
-    border-left: 4px solid #3182ce;
-    border-radius: 0 8px 8px 0;
-    padding: 14px 16px;
-    margin-bottom: 14px;
+    border-left: 3px solid #3182ce;
+    border-radius: 0 6px 6px 0;
+    padding: 10px 12px;
+    margin-bottom: 10px;
   }}
   .article-card:last-of-type {{ margin-bottom: 0; }}
   .article-title-row {{
     display: flex;
     align-items: flex-start;
-    gap: 8px;
-    margin-bottom: 8px;
+    gap: 6px;
+    margin-bottom: 6px;
   }}
   .article-badge {{
-    font-size: 15px;
+    font-size: 13px;
     flex-shrink: 0;
     margin-top: 1px;
   }}
   .article-title {{
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 700;
     color: #1a202c;
     margin: 0;
     line-height: 1.5;
-    letter-spacing: -0.2px;
+    word-break: keep-all;
   }}
   .article-summary {{
-    font-size: 13px;
+    font-size: 11px;
     color: #4a5568;
-    line-height: 1.75;
-    margin: 0 0 10px;
+    line-height: 1.7;
+    margin: 0 0 8px;
+    word-break: keep-all;
   }}
   .article-footer {{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
+    gap: 6px;
   }}
   .article-source {{
-    font-size: 11px;
+    font-size: 10px;
     color: #a0aec0;
     font-weight: 500;
-    letter-spacing: 0.3px;
   }}
   .read-more {{
-    font-size: 12px;
+    font-size: 11px;
     color: #3182ce;
     text-decoration: none;
     font-weight: 600;
     white-space: nowrap;
   }}
-  .read-more:hover {{ text-decoration: underline; }}
 
   /* ── 트렌드 바 ── */
   .trend-bar {{
-    margin-top: 16px;
+    margin-top: 10px;
     background: #fffbeb;
     border: 1px solid #f6e05e;
-    border-radius: 8px;
-    padding: 10px 14px;
-    font-size: 13px;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 11px;
     color: #744210;
     line-height: 1.6;
+    word-break: keep-all;
   }}
   .tech-trend-bar {{
     background: #f0edff;
@@ -338,54 +336,68 @@ def build_email_html(news_results: list[dict], tech_result: dict | None = None) 
 
   /* ── 반도체 기술 섹션 ── */
   .tech-section {{
-    margin-bottom: 28px;
+    margin-bottom: 14px;
     border: 2px solid #7b68ee;
-    border-radius: 12px;
+    border-radius: 10px;
     overflow: hidden;
     background: linear-gradient(180deg, #f8f6ff 0%, #fff 60%);
   }}
   .tech-badge {{
     background: linear-gradient(90deg, #7b68ee, #5a4fcf);
     color: white;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
-    padding: 6px 22px;
+    padding: 5px 14px;
   }}
   .tech-header {{
     background: #f3f0ff;
-    padding: 14px 22px;
+    padding: 9px 14px;
     border-bottom: 1px solid #d6d0f7;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
   }}
-  .tech-section .article-card {{
-    border-left-color: #7b68ee;
-  }}
-  .tech-section .article-title {{ color: #2d3748; }}
+  .tech-section .article-card {{ border-left-color: #7b68ee; }}
   .tech-section .read-more {{ color: #5a4fcf; }}
 
   /* ── fallback ── */
   .fallback-content {{
-    font-size: 13px;
+    font-size: 11px;
     color: #4a5568;
-    line-height: 1.8;
+    line-height: 1.7;
     white-space: pre-wrap;
+    word-break: keep-all;
   }}
 
   /* ── 푸터 ── */
   .footer {{
     background: #f8fafc;
     border-top: 1px solid #e2e8f0;
-    padding: 24px 40px;
+    padding: 14px 16px;
     text-align: center;
-    font-size: 12px;
+    font-size: 11px;
     color: #a0aec0;
-    line-height: 1.8;
+    line-height: 1.7;
   }}
   .footer a {{ color: #718096; text-decoration: none; }}
+
+  /* ── 모바일 미디어쿼리 ── */
+  @media (max-width: 480px) {{
+    body {{ padding: 0; }}
+    .container {{ border-radius: 0; box-shadow: none; }}
+    .header {{ padding: 18px 16px 16px; }}
+    .header-title {{ font-size: 18px; }}
+    .body {{ padding: 12px 10px 18px; }}
+    .topic-header {{ padding: 8px 10px; }}
+    .topic-content {{ padding: 8px 10px 10px; }}
+    .article-card {{ padding: 8px 10px; }}
+    .toc {{ padding: 8px 10px; gap: 5px; }}
+    .toc-item {{ font-size: 10px; padding: 2px 8px; }}
+    .tech-header {{ padding: 8px 10px; }}
+    .tech-section .topic-content {{ padding: 8px 10px 10px; }}
+  }}
 </style>
 </head>
 <body>
