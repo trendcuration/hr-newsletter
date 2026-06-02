@@ -3,8 +3,8 @@ import os
 # 뉴스레터 제목
 NEWSLETTER_TITLE = "주간 HR 뉴스레터"
 
-# Claude API
-ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+# OpenAI API
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
 
 # Gmail SMTP 설정
 GMAIL_USER = os.environ.get("GMAIL_USER", "i.garam.lee@gmail.com")
