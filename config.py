@@ -24,9 +24,9 @@ NEWS_TOPICS = [
         "title": "조직",
         "emoji": "🏢",
         "queries": [
-            "corporate restructuring layoffs 2025",
-            "organizational transformation company culture",
-            "기업 구조조정 조직개편 2025",
+            "US corporate restructuring layoffs 2025",
+            "기업 구조조정 조직개편 한국 2025",
+            "日本 企業 組織改革 リストラ 2025",
         ],
     },
     {
@@ -34,9 +34,9 @@ NEWS_TOPICS = [
         "title": "평가/보상",
         "emoji": "💰",
         "queries": [
-            "executive compensation salary trends 2025",
-            "performance management review system",
-            "성과평가 보상체계 임금 2025",
+            "US executive compensation salary trends 2025",
+            "성과평가 보상체계 임금 한국 2025",
+            "日本 賃金 給与 人事評価 2025",
         ],
     },
     {
@@ -44,9 +44,9 @@ NEWS_TOPICS = [
         "title": "인력운영",
         "emoji": "👥",
         "queries": [
-            "talent management hiring workforce 2025",
-            "remote work hybrid policy",
-            "채용 인력운영 리텐션 2025",
+            "US talent management hiring workforce 2025",
+            "채용 인력운영 리텐션 한국 2025",
+            "日本 採用 人材管理 2025",
         ],
     },
     {
@@ -54,9 +54,9 @@ NEWS_TOPICS = [
         "title": "노사",
         "emoji": "⚖️",
         "queries": [
-            "labor union strike workers rights 2025",
-            "collective bargaining employment law",
-            "노사관계 파업 단체교섭 2025",
+            "US labor union strike employment law 2025",
+            "노사관계 파업 단체교섭 한국 2025",
+            "日本 労働組合 労使関係 2025",
         ],
     },
     {
@@ -64,21 +64,21 @@ NEWS_TOPICS = [
         "title": "AI in HR",
         "emoji": "🤖",
         "queries": [
-            "AI human resources recruiting automation 2025",
-            "generative AI HR tools workforce planning",
-            "HR AI 인사관리 자동화 2025",
+            "US AI human resources recruiting automation 2025",
+            "HR AI 인사관리 자동화 한국 2025",
+            "日本 AI 人事 採用 自動化 2025",
         ],
     },
 ]
 
-# 반도체 기술 하이라이트 섹션
+# 반도체 기술 하이라이트 섹션 (이번 주 가장 주목받은 기술을 쉽게 설명)
 TECH_TOPIC = {
     "id": "tech_highlight",
-    "title": "이 주의 핫 기술",
+    "title": "이 주의 반도체 기술 해설",
     "emoji": "💡",
     "queries": [
-        "semiconductor chip technology breakthrough 2025",
-        "TSMC Samsung Intel HBM advanced packaging 2025",
-        "삼성전자 SK하이닉스 반도체 기술 2025",
+        "semiconductor technology trending news 2025",
+        "반도체 기술 이슈 동향 2025",
+        "Samsung SK hynix TSMC chip technology 2025",
     ],
 }

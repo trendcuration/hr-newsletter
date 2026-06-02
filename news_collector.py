@@ -22,9 +22,14 @@ def fetch_rss_articles(queries: list[str], max_total: int = 10) -> list[dict]:
     articles = []
 
     for query in queries:
-        is_korean = any(ord(c) > 127 for c in query)
-        if is_korean:
+        # 한국어·일본어 포함 여부로 언어 판단
+        has_korean = any('가' <= c <= '힣' for c in query)
+        has_japanese = any('぀' <= c <= 'ヿ' or '一' <= c <= '鿿' for c in query)
+
+        if has_korean:
             url = f"https://news.google.com/rss/search?q={quote(query)}&hl=ko&gl=KR&ceid=KR:ko"
+        elif has_japanese:
+            url = f"https://news.google.com/rss/search?q={quote(query)}&hl=ja&gl=JP&ceid=JP:ja"
         else:
             url = f"https://news.google.com/rss/search?q={quote(query)}&hl=en&gl=US&ceid=US:en"
 
@@ -76,12 +81,13 @@ def summarize_with_openai(topic_title: str, articles: list[dict], today: datetim
     prompt = f"""당신은 HR 전문 뉴스레터 에디터입니다. 오늘은 {today.strftime('%Y년 %m월 %d일')}입니다.
 
 아래는 최근 수집된 '{topic_title}' 관련 실제 뉴스 기사들입니다.
+⚠️ 미국·한국·일본 관련 기사만 선별하세요. 그 외 국가 기사는 제외합니다.
 중요한 것 3~5개를 아래 형식으로 정리해주세요.
 
 형식:
 
-### [기사 제목을 한국어로 번역 또는 작성 — 영문 제목 사용 금지]
-요약: [핵심 내용 3문장. 기업명·수치·날짜 포함. 한국어로 작성.]
+### [기사 제목을 한국어로 번역 또는 작성 — 영문·일문 제목 사용 금지]
+요약: [핵심 내용 3문장. 기업명·수치·날짜 포함. 어느 나라 사례인지 명시. 한국어로 작성.]
 출처: [제공된 출처 그대로]
 URL: [제공된 URL 그대로]
 
@@ -122,9 +128,50 @@ def collect_news_for_topic(topic: dict) -> dict:
 def collect_tech_highlight() -> dict:
     today = datetime.now()
     print(f"    RSS 수집 중...")
-    articles = fetch_rss_articles(TECH_TOPIC["queries"])
-    print(f"    기사 {len(articles)}개 수집, GPT-4o-mini 요약 중...")
-    content = summarize_with_openai(TECH_TOPIC["title"], articles, today, is_tech=True)
+    articles = fetch_rss_articles(TECH_TOPIC["queries"], max_total=15)
+    print(f"    기사 {len(articles)}개 수집, 핵심 기술 선정 및 해설 작성 중...")
+
+    articles_text = ""
+    for i, a in enumerate(articles, 1):
+        articles_text += f"\n[기사 {i}] {a['title']} ({a['published']}, {a['source']})\n미리보기: {a['snippet']}\n"
+
+    prompt = f"""당신은 반도체 기술을 쉽게 설명하는 전문 에디터입니다. 오늘은 {today.strftime('%Y년 %m월 %d일')}입니다.
+
+아래 뉴스 기사 목록을 분석하여, 이번 주 반도체 업계에서 가장 많이 언급되고 주목받은 기술 키워드 1개를 선정하세요.
+그리고 그 기술이 무엇인지 초등학생도 이해할 수 있도록 친근하게 설명해주세요.
+
+반드시 아래 형식으로 작성하세요:
+
+### 🔍 이번 주 주목 기술: [기술명]
+
+**한 줄 요약**
+[이 기술을 한 문장으로 설명]
+
+**쉽게 말하면?**
+[일상생활에 빗대어 초등학생도 이해할 수 있도록 2~3문장으로 설명. 비유·예시 활용 필수.]
+
+**왜 요즘 이게 핫할까요?**
+[이번 주 뉴스에서 이 기술이 주목받는 이유를 2~3문장으로 설명. 구체적 기업명이나 사건 언급.]
+
+**반도체 업계에서의 의미**
+[우리 회사(반도체 업계 종사자) 관점에서 이 기술이 왜 중요한지 2문장으로 설명.]
+
+---
+
+분석할 뉴스 기사:
+{articles_text}
+
+주의: 기술 설명은 전문용어를 최대한 피하고, 비유와 예시를 적극 활용해 누구나 읽기 쉽게 작성하세요."""
+
+    client = get_client()
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=1500,
+        temperature=0.5,
+    )
+    content = response.choices[0].message.content.strip()
+
     return {
         "id": TECH_TOPIC["id"],
         "title": TECH_TOPIC["title"],

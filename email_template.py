@@ -89,28 +89,40 @@ def build_topic_section(topic: dict, anchor_id: str) -> str:
   </div>"""
 
 
+def render_tech_explainer(content: str) -> str:
+    """기술 해설 마크다운을 HTML로 변환"""
+    lines = content.split("\n")
+    html = []
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        # ### 제목
+        if line.startswith("### "):
+            html.append(f'<h3 class="tech-main-title">{line[4:]}</h3>')
+        # **소제목**
+        elif line.startswith("**") and line.endswith("**"):
+            html.append(f'<p class="tech-sub-title">{line[2:-2]}</p>')
+        # 일반 텍스트
+        else:
+            # 인라인 볼드 처리
+            line = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", line)
+            html.append(f'<p class="tech-body">{line}</p>')
+    return "\n".join(html)
+
+
 def build_tech_section(tech_result: dict) -> str:
-    articles, trend_line = parse_articles(tech_result["content"])
-
-    if articles:
-        cards_html = "\n".join(build_article_card(a, i) for i, a in enumerate(articles))
-    else:
-        cards_html = f'<div class="fallback-content">{tech_result["content"]}</div>'
-
-    trend_html = ""
-    if trend_line:
-        trend_html = f'<div class="trend-bar tech-trend-bar">💬 {trend_line}</div>'
+    content_html = render_tech_explainer(tech_result["content"])
 
     return f"""
   <div class="tech-section" id="tech">
-    <div class="tech-badge">🔬 반도체 기술 동향</div>
+    <div class="tech-badge">🔬 반도체 기술 해설</div>
     <div class="tech-header">
       <span class="topic-emoji">{tech_result["emoji"]}</span>
       <span class="topic-title">{tech_result["title"]}</span>
     </div>
-    <div class="topic-content">
-      {cards_html}
-      {trend_html}
+    <div class="tech-explainer">
+      {content_html}
     </div>
   </div>"""
 
@@ -359,8 +371,33 @@ def build_email_html(news_results: list[dict], tech_result: dict | None = None) 
     align-items: center;
     gap: 8px;
   }}
-  .tech-section .article-card {{ border-left-color: #7b68ee; }}
-  .tech-section .read-more {{ color: #5a4fcf; }}
+  /* ── 기술 해설 콘텐츠 ── */
+  .tech-explainer {{
+    padding: 12px 14px 16px;
+  }}
+  .tech-main-title {{
+    font-size: 14px;
+    font-weight: 800;
+    color: #3d2b8e;
+    margin: 0 0 12px;
+    line-height: 1.4;
+    word-break: keep-all;
+  }}
+  .tech-sub-title {{
+    font-size: 12px;
+    font-weight: 700;
+    color: #5a4fcf;
+    margin: 14px 0 4px;
+    padding-left: 8px;
+    border-left: 3px solid #7b68ee;
+  }}
+  .tech-body {{
+    font-size: 12px;
+    color: #4a5568;
+    line-height: 1.75;
+    margin: 0 0 6px;
+    word-break: keep-all;
+  }}
 
   /* ── fallback ── */
   .fallback-content {{
