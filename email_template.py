@@ -127,18 +127,20 @@ def build_tech_section(tech_result: dict) -> str:
   </div>"""
 
 
-def build_toc(topics: list[dict], has_tech: bool) -> str:
+def build_toc(topics: list[dict], has_semi: bool, has_tech: bool) -> str:
     items = []
     for t in topics:
         items.append(
             f'<a href="#{t["id"]}" class="toc-item"><span class="toc-emoji">{t["emoji"]}</span>{t["title"]}</a>'
         )
+    if has_semi:
+        items.append('<a href="#semi_news" class="toc-item toc-semi"><span class="toc-emoji">📰</span>반도체 뉴스 Top 5</a>')
     if has_tech:
-        items.append('<a href="#tech" class="toc-item toc-tech"><span class="toc-emoji">💡</span>이 주의 핫 기술</a>')
+        items.append('<a href="#tech" class="toc-item toc-tech"><span class="toc-emoji">💡</span>기술 해설</a>')
     return f'<div class="toc">{"".join(items)}</div>'
 
 
-def build_email_html(news_results: list[dict], tech_result: dict | None = None) -> str:
+def build_email_html(news_results: list[dict], semi_result: dict | None = None, tech_result: dict | None = None) -> str:
     today = datetime.now()
     week_num = today.isocalendar()[1]
     date_str = today.strftime("%Y년 %m월 %d일")
@@ -146,8 +148,9 @@ def build_email_html(news_results: list[dict], tech_result: dict | None = None) 
     topics_html = "\n".join(
         build_topic_section(t, t["id"]) for t in news_results
     )
+    semi_html = build_topic_section(semi_result, "semi_news") if semi_result else ""
     tech_html = build_tech_section(tech_result) if tech_result else ""
-    toc_html = build_toc(news_results, tech_result is not None)
+    toc_html = build_toc(news_results, semi_result is not None, tech_result is not None)
 
     return f"""<!DOCTYPE html>
 <html lang="ko">
@@ -246,6 +249,7 @@ def build_email_html(news_results: list[dict], tech_result: dict | None = None) 
     border-radius: 20px;
     padding: 3px 10px;
   }}
+  .toc-semi {{ border-color: #2b8a3e; color: #2b8a3e; }}
   .toc-tech {{ border-color: #7b68ee; color: #5a4fcf; }}
   .toc-emoji {{ font-size: 12px; }}
 
@@ -457,6 +461,8 @@ def build_email_html(news_results: list[dict], tech_result: dict | None = None) 
     {toc_html}
 
     {topics_html}
+
+    {semi_html}
 
     {tech_html}
   </div>

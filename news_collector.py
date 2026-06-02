@@ -4,7 +4,7 @@ import re
 import time
 from datetime import datetime, timedelta, timezone
 from urllib.parse import quote
-from config import OPENAI_API_KEY, NEWS_TOPICS, SEARCH_PERIOD_DAYS, TECH_TOPIC
+from config import OPENAI_API_KEY, NEWS_TOPICS, SEARCH_PERIOD_DAYS, SEMI_NEWS_TOPIC, TECH_TOPIC
 
 _client = None
 
@@ -125,6 +125,64 @@ def collect_news_for_topic(topic: dict) -> dict:
     }
 
 
+def collect_semi_news() -> dict:
+    """반도체 주요 뉴스 Top 5 수집"""
+    today = datetime.now()
+    week_ago = today - timedelta(days=SEARCH_PERIOD_DAYS)
+    date_range = f"{week_ago.strftime('%Y년 %m월 %d일')} ~ {today.strftime('%Y년 %m월 %d일')}"
+
+    print(f"    RSS 수집 중...")
+    articles = fetch_rss_articles(SEMI_NEWS_TOPIC["queries"], max_total=15)
+    print(f"    기사 {len(articles)}개 수집, Top 5 선정 중...")
+
+    if not articles:
+        return {
+            "id": SEMI_NEWS_TOPIC["id"],
+            "title": SEMI_NEWS_TOPIC["title"],
+            "emoji": SEMI_NEWS_TOPIC["emoji"],
+            "content": "이번 주 반도체 뉴스를 수집하지 못했습니다.",
+        }
+
+    articles_text = ""
+    for i, a in enumerate(articles, 1):
+        articles_text += f"\n[기사 {i}]\n제목: {a['title']}\n출처: {a['source']}\n날짜: {a['published']}\nURL: {a['url']}\n미리보기: {a['snippet']}\n"
+
+    prompt = f"""당신은 반도체 전문 뉴스레터 에디터입니다. 오늘은 {today.strftime('%Y년 %m월 %d일')}입니다.
+
+아래 기사 목록에서 {date_range} 기간 내 한국·미국 관련 반도체 뉴스 중 가장 중요한 5개를 선정해 정리해주세요.
+중요도 기준: 산업 영향력, 기술 혁신성, 시장 파급력 순.
+
+각 기사마다 아래 형식으로 작성하세요:
+
+### [기사 제목을 한국어로 번역 또는 작성 — 영문 제목 사용 금지]
+요약: [핵심 내용 3문장. 무슨 일이 있었는지, 의미가 무엇인지, 업계 영향이 무엇인지. 한국어로 작성.]
+출처: [제공된 출처 그대로]
+URL: [제공된 URL 그대로]
+
+---
+
+수집된 기사:
+{articles_text}
+
+주의: 제공된 URL을 그대로 사용하세요. 임의로 URL을 만들지 마세요."""
+
+    client = get_client()
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=2000,
+        temperature=0.3,
+    )
+    content = response.choices[0].message.content.strip()
+
+    return {
+        "id": SEMI_NEWS_TOPIC["id"],
+        "title": SEMI_NEWS_TOPIC["title"],
+        "emoji": SEMI_NEWS_TOPIC["emoji"],
+        "content": content,
+    }
+
+
 def collect_tech_highlight() -> dict:
     today = datetime.now()
     print(f"    RSS 수집 중...")
@@ -181,7 +239,7 @@ def collect_tech_highlight() -> dict:
     }
 
 
-def collect_all_news() -> tuple[list[dict], dict]:
+def collect_all_news() -> tuple[list[dict], dict, dict]:
     results = []
     print(f"뉴스 수집 시작: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
     print(f"방식: Google News RSS + GPT-4o-mini 요약")
@@ -204,6 +262,20 @@ def collect_all_news() -> tuple[list[dict], dict]:
             })
 
     time.sleep(3)
+    print(f"  [{SEMI_NEWS_TOPIC['title']}] 수집 중...")
+    try:
+        semi_result = collect_semi_news()
+        print(f"  [{SEMI_NEWS_TOPIC['title']}] 완료")
+    except Exception as e:
+        print(f"  [{SEMI_NEWS_TOPIC['title']}] 오류: {e}")
+        semi_result = {
+            "id": SEMI_NEWS_TOPIC["id"],
+            "title": SEMI_NEWS_TOPIC["title"],
+            "emoji": SEMI_NEWS_TOPIC["emoji"],
+            "content": f"이번 주 수집 중 오류가 발생했습니다: {str(e)}",
+        }
+
+    time.sleep(3)
     print(f"  [{TECH_TOPIC['title']}] 수집 중...")
     try:
         tech_result = collect_tech_highlight()
@@ -217,4 +289,4 @@ def collect_all_news() -> tuple[list[dict], dict]:
             "content": f"이번 주 수집 중 오류가 발생했습니다: {str(e)}",
         }
 
-    return results, tech_result
+    return results, semi_result, tech_result

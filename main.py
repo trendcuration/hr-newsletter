@@ -21,11 +21,11 @@ def run(preview_only: bool = False):
     print(f"실행 시각: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 50)
 
-    # 1. 뉴스 수집 (HR 토픽 + 반도체 기술)
-    news_results, tech_result = collect_all_news()
+    # 1. 뉴스 수집 (HR 토픽 + 반도체 뉴스 + 기술 해설)
+    news_results, semi_result, tech_result = collect_all_news()
 
     # 2. 이메일 빌드
-    html = build_email_html(news_results, tech_result)
+    html = build_email_html(news_results, semi_result, tech_result)
     subject = build_email_subject()
 
     print(f"\n제목: {subject}")

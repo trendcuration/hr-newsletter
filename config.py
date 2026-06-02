@@ -66,6 +66,17 @@ NEWS_TOPICS = [
     },
 ]
 
+# 반도체 주요 뉴스 Top 5
+SEMI_NEWS_TOPIC = {
+    "id": "semi_news",
+    "title": "반도체 주요 뉴스 Top 5",
+    "emoji": "📰",
+    "queries": [
+        "semiconductor chip industry news Korea US 2025",
+        "반도체 뉴스 한국 미국 2025",
+    ],
+}
+
 # 반도체 기술 하이라이트 섹션 (이번 주 가장 주목받은 기술을 쉽게 설명)
 TECH_TOPIC = {
     "id": "tech_highlight",
