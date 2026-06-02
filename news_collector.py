@@ -38,7 +38,7 @@ URL: [실제 기사 URL]
     response = client.messages.create(
         model="claude-sonnet-4-6",
         max_tokens=2000,
-        tools=[{"type": "web_search_20250305", "name": "web_search", "max_uses": 5}],
+        tools=[{"type": "web_search_20250305", "name": "web_search", "max_uses": 3}],
         messages=[{"role": "user", "content": prompt}],
     )
 
@@ -93,7 +93,7 @@ URL: [실제 기사 URL]
     response = client.messages.create(
         model="claude-sonnet-4-6",
         max_tokens=2000,
-        tools=[{"type": "web_search_20250305", "name": "web_search", "max_uses": 5}],
+        tools=[{"type": "web_search_20250305", "name": "web_search", "max_uses": 3}],
         messages=[{"role": "user", "content": prompt}],
     )
 
@@ -122,8 +122,8 @@ def collect_all_news() -> tuple[list[dict], dict]:
 
     for i, topic in enumerate(NEWS_TOPICS):
         if i > 0:
-            print(f"  (rate limit 방지 대기 75초...)")
-            time.sleep(75)
+            print(f"  (rate limit 방지 대기 30초...)")
+            time.sleep(60)
         print(f"  [{topic['title']}] 수집 중...")
         try:
             result = collect_news_for_topic(client, topic)
@@ -139,8 +139,8 @@ def collect_all_news() -> tuple[list[dict], dict]:
                 "usage": {"input_tokens": 0, "output_tokens": 0},
             })
 
-    print(f"  (rate limit 방지 대기 75초...)")
-    time.sleep(75)
+    print(f"  (rate limit 방지 대기 30초...)")
+    time.sleep(60)
     print(f"  [{TECH_TOPIC['title']}] 수집 중...")
     try:
         tech_result = collect_tech_highlight(client)
