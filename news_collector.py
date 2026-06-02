@@ -1,4 +1,5 @@
 import feedparser
+import requests
 from openai import OpenAI
 import re
 import time
@@ -7,6 +8,30 @@ from urllib.parse import quote
 from config import OPENAI_API_KEY, NEWS_TOPICS, SEARCH_PERIOD_DAYS, SEMI_NEWS_TOPIC, TECH_TOPIC
 
 _client = None
+_session = None
+
+def get_http_session():
+    global _session
+    if _session is None:
+        _session = requests.Session()
+        _session.headers.update({"User-Agent": "Mozilla/5.0"})
+    return _session
+
+
+def resolve_url(url: str) -> str:
+    """Google News 리다이렉트 URL을 실제 기사 URL로 변환"""
+    if "news.google.com" not in url:
+        return url
+    try:
+        resp = get_http_session().get(url, timeout=6, allow_redirects=True)
+        final = resp.url
+        # 여전히 google.com 도메인이면 변환 실패
+        if "google.com" in final:
+            return url
+        return final
+    except Exception:
+        return url
+
 
 def get_client():
     global _client
@@ -52,9 +77,11 @@ def fetch_rss_articles(queries: list[str], max_total: int = 10) -> list[dict]:
 
             snippet = re.sub(r"<[^>]+>", "", entry.get("summary", ""))[:300]
 
+            real_url = resolve_url(link)
+
             articles.append({
                 "title": entry.get("title", ""),
-                "url": link,
+                "url": real_url,
                 "source": source,
                 "published": pub_dt.strftime("%Y-%m-%d"),
                 "snippet": snippet,
