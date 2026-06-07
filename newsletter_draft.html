@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>주간 HR 뉴스레터</title>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', '맑은 고딕', sans-serif;
+    background: #f0f2f5;
+    margin: 0;
+    padding: 12px 0;
+    color: #333;
+  }
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  }
+
+  /* ── 헤더 ── */
+  .header {
+    background: linear-gradient(135deg, #0d1b2a 0%, #1b2d45 50%, #1a3a5c 100%);
+    color: white;
+    padding: 24px 24px 20px;
+    text-align: center;
+  }
+  .header-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #7eb8e8;
+    margin-bottom: 6px;
+  }
+  .header-title {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin: 0 0 4px;
+  }
+  .header-sub {
+    font-size: 11px;
+    color: #90cdf4;
+    margin: 0;
+  }
+  .week-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 3px 14px;
+    font-size: 11px;
+    margin-top: 12px;
+    letter-spacing: 0.3px;
+  }
+
+  /* ── 본문 래퍼 ── */
+  .body {
+    padding: 16px 14px 24px;
+  }
+  .intro {
+    background: #eef5ff;
+    border-left: 3px solid #3182ce;
+    padding: 10px 12px;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 14px;
+    font-size: 12px;
+    color: #2c5282;
+    line-height: 1.6;
+  }
+
+  /* ── 목차 ── */
+  .toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 16px;
+    padding: 10px 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+  }
+  .toc-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: #4a5568;
+    text-decoration: none;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 3px 10px;
+  }
+  .toc-semi { border-color: #2b8a3e; color: #2b8a3e; }
+  .toc-tech { border-color: #7b68ee; color: #5a4fcf; }
+  .toc-emoji { font-size: 12px; }
+
+  /* ── 토픽 섹션 ── */
+  .topic-section {
+    margin-bottom: 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .topic-header {
+    background: #f8fafc;
+    padding: 9px 14px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .topic-emoji { font-size: 16px; }
+  .topic-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a202c;
+    letter-spacing: -0.2px;
+  }
+  .topic-content { padding: 10px 12px 12px; }
+
+  /* ── 기사 카드 ── */
+  .article-card {
+    background: #fafbfc;
+    border: 1px solid #e8edf2;
+    border-left: 3px solid #3182ce;
+    border-radius: 0 6px 6px 0;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+  }
+  .article-card:last-of-type { margin-bottom: 0; }
+  .article-title-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+  .article-badge {
+    font-size: 13px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .article-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #1a202c;
+    margin: 0;
+    line-height: 1.5;
+    word-break: keep-all;
+  }
+  .article-summary {
+    font-size: 11px;
+    color: #4a5568;
+    line-height: 1.7;
+    margin: 0 0 8px;
+    word-break: keep-all;
+  }
+  .article-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+  }
+  .article-source {
+    font-size: 10px;
+    color: #a0aec0;
+    font-weight: 500;
+  }
+  .read-more {
+    font-size: 11px;
+    color: #3182ce;
+    text-decoration: none;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* ── 트렌드 바 ── */
+  .trend-bar {
+    margin-top: 10px;
+    background: #fffbeb;
+    border: 1px solid #f6e05e;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 11px;
+    color: #744210;
+    line-height: 1.6;
+    word-break: keep-all;
+  }
+  .tech-trend-bar {
+    background: #f0edff;
+    border-color: #b794f4;
+    color: #44337a;
+  }
+
+  /* ── 반도체 기술 섹션 ── */
+  .tech-section {
+    margin-bottom: 14px;
+    border: 2px solid #7b68ee;
+    border-radius: 10px;
+    overflow: hidden;
+    background: linear-gradient(180deg, #f8f6ff 0%, #fff 60%);
+  }
+  .tech-badge {
+    background: linear-gradient(90deg, #7b68ee, #5a4fcf);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+  }
+  .tech-header {
+    background: #f3f0ff;
+    padding: 9px 14px;
+    border-bottom: 1px solid #d6d0f7;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  /* ── 기술 해설 콘텐츠 ── */
+  .tech-explainer {
+    padding: 12px 14px 16px;
+  }
+  .tech-main-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: #3d2b8e;
+    margin: 0 0 12px;
+    line-height: 1.4;
+    word-break: keep-all;
+  }
+  .tech-sub-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #5a4fcf;
+    margin: 14px 0 4px;
+    padding-left: 8px;
+    border-left: 3px solid #7b68ee;
+  }
+  .tech-body {
+    font-size: 12px;
+    color: #4a5568;
+    line-height: 1.75;
+    margin: 0 0 6px;
+    word-break: keep-all;
+  }
+
+  /* ── fallback ── */
+  .fallback-content {
+    font-size: 11px;
+    color: #4a5568;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: keep-all;
+  }
+
+  /* ── 푸터 ── */
+  .footer {
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    padding: 14px 16px;
+    text-align: center;
+    font-size: 11px;
+    color: #a0aec0;
+    line-height: 1.7;
+  }
+  .footer a { color: #718096; text-decoration: none; }
+
+  /* ── 모바일 미디어쿼리 ── */
+  @media (max-width: 480px) {
+    body { padding: 0; }
+    .container { border-radius: 0; box-shadow: none; }
+    .header { padding: 18px 16px 16px; }
+    .header-title { font-size: 18px; }
+    .body { padding: 12px 10px 18px; }
+    .topic-header { padding: 8px 10px; }
+    .topic-content { padding: 8px 10px 10px; }
+    .article-card { padding: 8px 10px; }
+    .toc { padding: 8px 10px; gap: 5px; }
+    .toc-item { font-size: 10px; padding: 2px 8px; }
+    .tech-header { padding: 8px 10px; }
+    .tech-section .topic-content { padding: 8px 10px 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="header-label">HR Intelligence</div>
+    <h1 class="header-title">주간 HR 뉴스레터</h1>
+    <p class="header-sub">글로벌 HR 트렌드 주간 요약 + 반도체 기술 동향</p>
+    <div class="week-badge">23주차 &middot; 2026년 06월 07일</div>
+  </div>
+
+  <div class="body">
+    <div class="intro">
+      이번 주 글로벌 HR 주요 기사와 반도체 기술 동향을 정리했습니다.
+      미국·유럽 기업 중심으로 조직, 보상, 인력운영, 노사, AI/HR 5개 영역을 커버하며,
+      마지막 섹션에서 이 주의 핫 반도체 기술을 소개합니다.
+    </div>
+
+    <div class="toc"><a href="#organization" class="toc-item"><span class="toc-emoji">🏢</span>조직</a><a href="#compensation" class="toc-item"><span class="toc-emoji">💰</span>평가/보상</a><a href="#workforce" class="toc-item"><span class="toc-emoji">👥</span>인력운영</a><a href="#labor" class="toc-item"><span class="toc-emoji">⚖️</span>노사</a><a href="#ai_hr" class="toc-item"><span class="toc-emoji">🤖</span>AI in HR</a><a href="#semi_news" class="toc-item toc-semi"><span class="toc-emoji">📰</span>반도체 뉴스 Top 5</a><a href="#tech" class="toc-item toc-tech"><span class="toc-emoji">💡</span>기술 해설</a></div>
+
+    
+  <div class="topic-section" id="organization">
+    <div class="topic-header">
+      <span class="topic-emoji">🏢</span>
+      <span class="topic-title">조직</span>
+    </div>
+    <div class="topic-content">
+      
+    <div class="article-card">
+      <div class="article-title-row">
+        <span class="article-badge">①</span>
+        <h3 class="article-title">AI 에이전트 확산으로 9,200개 일자리 대체 — 기술직 해고 가속</h3>
+      </div>
+      <p class="article-summary">글로벌 AI 에이전트 확산으로 현재까지 약 9,200개 이상의 일자리가 대체된 것으로 추정됐다(한국). 이 중 약 20%는 AI 도입과 조직 구조 개편에 직접적인 영향을 받은 것으로 분석됐다. 기업들의 연쇄 구조조정도 이어지며 기술직군 해고가 빠른 속도로 진행되고 있다.</p>
+      <div class="article-footer">
+        <span class="article-source">디지털투데이</span>
+        <a class="read-more" href="https://www.digitaltoday.co.kr/news/articleView.html?idxno=641831" target="_blank">원문 읽기 →</a>
+      </div>
+    </div>
+
+    <div class="article-card">
+      <div class="article-title-row">
+        <span class="article-badge">②</span>
+        <h3 class="article-title">마이크로소프트, 역대급 희망퇴직 이후 '성장통' 심화</h3>
+      </div>
+      <p class="article-summary">마이크로소프트가 급격한 인력 구조조정을 단행한 이후 심각한 성장통을 겪고 있다는 분석이 나왔다(미국). 우버 COO 앤드루 맥도널드는 AI 지출 증가가 실제 업무 성과 향상으로 이어졌다고 밝혀, 구조조정 후 생산성 논쟁이 불거지고 있다. 메타, 아마존도 희망퇴직 형식으로 AI 투자 자금을 마련하는 추세가 이어지고 있다.</p>
+      <div class="article-footer">
+        <span class="article-source">이인포맥스</span>
+        <a class="read-more" href="https://news.einfomax.co.kr/news/articleView.html?idxno=4418308" target="_blank">원문 읽기 →</a>
+      </div>
+    </div>
+
+    <div class="article-card">
+      <div class="article-title-row">
+        <span class="article-badge">③</span>
+        <h3 class="article-title">총수·직원 보수격차 심화 — 구조조정에도 두둑한 임원 보수 논란</h3>
+      </div>
+      <p class="article-summary">2025년 기준 총수가 있는 81개 기업집단 460개 계열사 분석 결과, 계열사 구조조정이 잇따르는 상황에서도 총수 보수는 증가해 '보수 격차' 논란이 확산되고 있다(한국). CEO스코어 조사에 따르면 총수와 일반 직원 간 보수 격차가 수십 배에 달하는 사례가 다수 발견됐다. 사회적 위화감을 키운다는 지적과 함께 투명한 임원 보수 공시 요구도 높아지고 있다.</p>
+      <div class="article-footer">
+        <span class="article-source">디지털타임스</span>
+        <a class="read-more" href="https://www.dt.co.kr/article/12057654?ref=naver" target="_blank">원문 읽기 →</a>
+      </div>
+    </div>
+      <div class="trend-bar">📌 AI 구조조정이 기술직을 중심으로 확산되면서 'AI 인력 대체 vs. 성과 향상' 논쟁이 글로벌 HR 아젠다로 부상하고 있다.</div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="compensation">
+    <div class="topic-header">
+      <span class="topic-emoji">💰</span>
+      <span class="topic-title">평가/보상</span>
+    </div>
+    <div class="topic-content">
+      
+    <div class="article-card">
+      <div class="article-title-row">
+        <span class="article-badge">①</span>
+        <h3 class="article-title">카카오, 창사 후 첫 총파업 예고 — 성과급·임금 인상 갈등 폭발</h3>
+      </div>
+      <p class="article-summary">카카오 노조가 창사 이후 첫 총파업을 예고하며 노사 갈등이 최고조에 달하고 있다(한국). 표면적 쟁점은 지난해 실적 개선을 근거로 한 성과급 인상과 보상체계 개편이며, 최근 대표이사 교체까지 맞물려 복합적인 위기 국면이다. 성과급 체계를 놓고 이견이 좁혀지지 않아 6월 중 파업 돌입 가능성이 높아지고 있다.</p>
+      <div class="article-footer">
+        <span class="article-source">CEO스코어데일리</span>
+        <a class="read-more" href="https://www.ceoscoredaily.com/page/view/2026060416025638975" target="_blank">원문 읽기 →</a>
+      </div>
+    </div>
+
+    <div class="article-card">
+      <div class="article-title-row">
+        <span class="article-badge">②</span>
+        <h3 class="article-title">현대자동차 노조, 순이익의 30% 성과급·3조 원 요구</h3>
+      </div>
+      <p class="article-summary">현대차 노조가 2026년 임단협에서 전년도 순이익(약 10조 원)의 30% 수준인 약 3조 원 규모의 성과급 지급을 요구하고 있다(한국). 로봇 도입에 대한 노사 합의 요구도 병행되어 협상 난이도가 높아진 상황이다. 역대 최고 수준의 성과급 요구로 단체교섭이 장기화될 것이라는 전망이 나온다.</p>
+      <div class="article-footer">
+        <span class="article-source">라이트노우</span>
+        <a class="read-more" href="http://www.rightknow.co.kr/news/articleView.html?idxno=34166" target="_blank">원문 읽기 →</a>
+      </div>
+    </div>
+
+    <div class="article-card">
+      <div class="article-title-row">
+        <span class="article-badge">③</span>
+        <h3 class="article-title">'은행권은 왜 조용한가' — 집단 보상 구조의 차이</h3>
+      </div>
+      <p class="article-summary">카카오·현대차 등 산업계 성과급 갈등이 뜨거운 가운데, 은행권은 상대적으로 조용한 이유가 주목받고 있다(한국). 은행권 전사 성과급은 임금·단체협약에서 결정되는 '집단 보상' 성격이 강해 개인별 편차가 적다. 최근 타결된 2025년 임금협약에 성과급·복지포인트·특별격려금을 패키지로 묶은 구조가 갈등을 완화하고 있다는 분석이다.</p>
+      <div class="article-footer">
+        <span class="article-source">더팩트</span>
+        <a class="read-more" href="https://n.news.naver.com/mnews/article/629/0000504961?sid=101" target="_blank">원문 읽기 →</a>
+      </div>
+    </div>
+      <div class="trend-bar">📌 성과 연동 보상체계가 '기업 이익 vs. 노동 분배'의 핵심 쟁점으로 부상하며, 집단 교섭 구조와 개인 성과급 체계 간의 긴장이 산업 전반으로 확산되고 있다.</div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="workforce">
+    <div class="topic-header">
+      <span class="topic-emoji">👥</span>
+      <span class="topic-title">인력운영</span>
+    </div>
+    <div class="topic-content">
+      
+    <div class="article-card">
+      <div class="article-title-row">
+        <span class="article-badge">①</span>
+        <h3 class="article-title">메타·아마존·MS, 희망퇴직으로 AI 투자 자금 마련 — 인력전략 대전환</h3>
+      </div>
+      <p class="article-summary">메타, 아마존, 마이크로소프트가 대규모 희망퇴직을 통해 AI 투자 재원을 마련하는 전략을 채택하고 있다(미국). 단순 비용 절감이 아닌 인력 포트폴리오 재편 — AI 전환 인력 축소 후 AI 관련 직군 확대 — 의 이중 구조가 확인된다. 한국 기업들도 '희망퇴직 상시화'와 '내부 인력 소프트웨어 전환'을 주요 카드로 검토 중이다.</p>
+      <div class="article-footer">
+        <span class="article-source">게임뷰</span>
+        <a class="read-more" href="https://www.gamevu.co.kr/news/articleView.html?idxno=58046" target="_blank">원문 읽기 →</a>
+      </div>
+    </div>
+
+    <div class="article-card">
+      <div class="article-title-row">
+        <span class="article-badge">②</span>
+        <h3 class="article-title">삼성전자 신년사 '인적 초격차' 강조 — 내부 전환 배치 본격화</h3>
+      </div>
+      <p class="article-summary">삼성전자가 2026년 신년사에서 '기술 초격차'를 넘는 '인적 초격차'를 선언하며 인력 운영 전략 변화를 예고했다(한국). 대규모 강제 해고가 어려운 국내 여건에서 희망퇴직 상시화와 내부 인력의 소프트웨어 직군 전환이 유력한 방향으로 거론된다. 이는 반도체·AI 분야 핵심 인력 확보와 레거시 직군 규모 조정을 동시에 추진하는 투트랙 전략이다.</p>
+      <div class="article-footer">
+        <span class="article-source">이코노미조선</span>
+        <a class="read-more" href="https://economychosun.com/site/data/html_dir/2026/01/23/2026012300027.html" target="_blank">원문 읽기 →</a>
+      </div>
+    </div>
+
+    <div class="article-card">
+      <div class="article-title-row">
+        <span class="article-badge">③</span>
+        <h3 class="article-title">싱가포르, 채용 기준 '학위→실무역량'으로 전환 가속</h3>
+      </div>
+      <p class="article-summary">싱가포르 채용 시장이 디지털 전환·AI·자동화를 배경으로 학위보다 실무 역량을 중시하는 방향으로 빠르게 재편되고 있다(싱가포르). 공공부문은 채용 포함 주요 인사 의사결정에 역량 기반 프레임워크를 도입했으며 각 기관이 구체적 기준을 정비 중이다. 한국 기업 HR 담당자에게 역량 중심 채용 설계의 참고 사례로 주목된다.</p>
+      <div class="article-footer">
+        <span class="article-source">KOTRA</span>
+        <a class="read-more" href="http://dream.kotra.or.kr/kotranews/cms/news/actionKotraBoardDetail.do?SITE_NO=3&MENU_ID=180&CONTENTS_NO=1&bbsGbn=243&bbsSn=243&pNttSn=241412" target="_blank">원문 읽기 →</a>
+      </div>
+    </div>
+      <div class="trend-bar">📌 글로벌 빅테크의 인력 재편이 'AI 전환 투자 재원 마련'이라는 재무 목적과 '인적 포트폴리오 최적화'라는 전략 목적이 결합된 복합 트렌드로 진행되고 있다.</div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="labor">
+    <div class="topic-header">
+      <span class="topic-emoji">⚖️</span>
+      <span class="topic-title">노사</span>
+    </div>
+    <div class="topic-content">
+      
+    <div class="article-card">
+      <div class="article-title-row">
+        <span class="article-badge">①</span>
+        <h3 class="article-title">삼성전자 2026년 임금협약 타결 — 협력사·인재양성 5조 투자 병행</h3>
+      </div>
+      <p class="article-summary">삼성전자 노사가 2026년 임금협약에 합의하며 장기 교섭을 마무리했다(한국). 삼성전자는 협력사 상생 및 인재 양성에 5조 원을 투자하는 상생안을 동시에 발표했다. 삼성의 타결 결과가 현대차·카카오 등 아직 협상 중인 기업들의 기준점으로 작용할 것이라는 전망이 나온다.</p>
+      <div class="article-footer">
+        <span class="article-source">전자신문</span>
+        <a class="read-more" href="https://n.news.naver.com/mnews/article/030/0003431755?sid=101" target="_blank">원문 읽기 →</a>
+      </div>
+    </div>
+
+    <div class="article-card">
+      <div class="article-title-row">
+        <span class="article-badge">②</span>
+        <h3 class="article-title">금속노조, '노란봉투법' 원년 원청교섭 본격 추진</h3>
+      </div>
+      <p class="article-summary">2025년 개정 노동조합법(노란봉투법) 시행 원년을 맞아 금속노조가 원청 기업을 상대로 한 직접 교섭을 본격 추진하고 있다(한국). 개정법은 '실질적 사용자'에게 교섭의무를 부여해 원·하청 노사관계를 대폭 재편할 전망이다. 올해 원청교섭의 성과와 한계가 향후 한국 노사관계 전반의 방향을 결정지을 시험대가 될 것이다.</p>
+      <div class="article-footer">
+        <span class="article-source">노동법률</span>
+        <a class="read-more" href="http://www.worklaw.co.kr/view/view.asp?accessSite=Naver&accessMethod=Search&accessMenu=News&in_cate=102&in_cate2=0&gopage=1&bi_pidx=39219" target="_blank">원문 읽기 →</a>
+      </div>
+    </div>
+
+    <div class="article-card">
+      <div class="article-title-row">
+        <span class="article-badge">③</span>
+        <h3 class="article-title">경총 '도요타 노사관계' 보고서 — 한국 노사에 직격 경고</h3>
+      </div>
+      <p class="article-summary">한국경영자총협회가 '도요타 노사관계의 시사점' 보고서를 발표, 국내 노사관계의 문제점으로 이익 분배 요구 중심 교섭·개정 노조법 혼란·파업 남용 등을 지목했다(한국). 도요타 노조가 생존을 고민하며 회사와 협력하는 방식과 대조적이라는 평가다. 국내 산업 경쟁력 관점에서 협력적 노사관계 모델의 필요성을 강조했다.</p>
+      <div class="article-footer">
+        <span class="article-source">위메이크뉴스</span>
+        <a class="read-more" href="https://wemakenews.co.kr/news/view.php?no=25385" target="_blank">원문 읽기 →</a>
+      </div>
+    </div>
+      <div class="trend-bar">📌 노란봉투법 시행과 대기업 임단협 시즌이 맞물리며, 원청교섭 확대·성과급 배분 갈등이 2026년 노사관계의 양대 핵심 쟁점으로 부상하고 있다.</div>
+    </div>
+  </div>
+
+  <div class="topic-section" id="ai_hr">
+    <div class="topic-header">
+      <span class="topic-emoji">🤖</span>
+      <span class="topic-title">AI in HR</span>
+    </div>
+    <div class="topic-content">
+      
+    <div class="article-card">
+      <div class="article-title-row">
+        <span class="article-badge">①</span>
+        <h3 class="article-title">나인하이어, HR 솔루션에 MCP 연동 AI 채용 자동화 출시</h3>
+      </div>
+      <p class="article-summary">채용 관리 솔루션 나인하이어가 자사 플랫폼에 AI 도구를 연결하는 MCP(Model Context Protocol) 연동 기능을 출시했다(한국). AI 에이전트와 대화 방식으로 채용 업무를 처리할 수 있는 인터페이스를 제공하며, 인사 운영의 자동화 수준을 한층 높일 계획이다. HR SaaS 시장에서 AI 에이전트 통합이 표준 기능으로 자리잡고 있다는 신호로 평가된다.</p>
+      <div class="article-footer">
+        <span class="article-source">아시아타임즈</span>
+        <a class="read-more" href="https://www.asiatime.co.kr/article/20260604500171" target="_blank">원문 읽기 →</a>
+      </div>
+    </div>
+
+    <div class="article-card">
+      <div class="article-title-row">
+        <span class="article-badge">②</span>
+        <h3 class="article-title">HR 인사 담당자 76%, "AI가 초급 채용 줄일 것" 우려</h3>
+      </div>
+      <p class="article-summary">HR SaaS 제공업체 Avature 설문에 따르면 인사 담당자의 76%가 AI가 초급 채용을 줄일 것이라는 우려를 가지고 있다(미국). AI를 통한 근로자 대체 추진이 경영진의 법적 책임 리스크와 내부 반발에 직면하고 있다는 분석도 병행됐다. AI가 채용 과정을 자동화하되, 부적절하게 관리될 경우 법적 분쟁으로 이어질 수 있다는 경고가 제기됐다.</p>
+      <div class="article-footer">
+        <span class="article-source">디지털비즈온</span>
+        <a class="read-more" href="http://www.digitalbizon.com/news/articleView.html?idxno=2342972" target="_blank">원문 읽기 →</a>
+      </div>
+    </div>
+
+    <div class="article-card">
+      <div class="article-title-row">
+        <span class="article-badge">③</span>
+        <h3 class="article-title">2026년 HR 패러다임: "AI가 찢은 전통 HR, 창의·진정성 회귀"</h3>
+      </div>
+      <p class="article-summary">2026년 HR 업계의 화두가 'AI가 대체할 수 없는 인간 고유의 창의성·진정성'으로 이동하고 있다는 분석이 나왔다(한국). AI가 채용·평가·행정 업무를 빠르게 자동화하면서, HR 담당자의 역할이 단순 관리에서 조직문화·리더십 개발로 전환되고 있다. 인사 담당자들이 AI 도구를 효과적으로 활용하면서도 '인간 중심적 HR'을 유지하는 균형이 핵심 역량으로 부상했다.</p>
+      <div class="article-footer">
+        <span class="article-source">이코노미조선</span>
+        <a class="read-more" href="https://economychosun.com/site/data/html_dir/2026/01/23/2026012300027.html" target="_blank">원문 읽기 →</a>
+      </div>
+    </div>
+      <div class="trend-bar">📌 AI가 HR 운영의 효율화를 넘어 조직 구조와 인력 포트폴리오 자체를 재편하는 수준으로 진화하면서, HR 담당자의 전략적 역할과 AI 활용 역량이 동시에 요구되고 있다.</div>
+    </div>
+  </div>
+
+    
+  <div class="topic-section" id="semi_news">
+    <div class="topic-header">
+      <span class="topic-emoji">📰</span>
+      <span class="topic-title">반도체 주요 뉴스 Top 5</span>
+    </div>
+    <div class="topic-content">
+      
+    <div class="article-card">
+      <div class="article-title-row">
+        <span class="article-badge">①</span>
+        <h3 class="article-title">젠슨 황 방한, 삼성·SK하이닉스와 HBM 공급 계약 구체화</h3>
+      </div>
+      <p class="article-summary">엔비디아 젠슨 황 CEO가 방한해 삼성전자·SK하이닉스와 HBM 장기 공급 계약 조건을 구체화했다. AI 데이터센터 수요 급증으로 메모리 반도체 수급 불균형이 심화되면서 삼성전자·SK하이닉스 주가 상승의 직접적 동인이 됐다. 엔비디아와 한국 K산업계의 동맹이 HBM·기판·냉각 기술 등으로 빠르게 확장되고 있다.</p>
+      <div class="article-footer">
+        <span class="article-source">중앙일보</span>
+        <a class="read-more" href="https://n.news.naver.com/mnews/article/025/0003528334?sid=101" target="_blank">원문 읽기 →</a>
+      </div>
+    </div>
+
+    <div class="article-card">
+      <div class="article-title-row">
+        <span class="article-badge">②</span>
+        <h3 class="article-title">TSMC 회장, 삼성·SK하이닉스 메모리 가격 인상 공개 비판</h3>
+      </div>
+      <p class="article-summary">웨이저자 TSMC 회장이 삼성전자·SK하이닉스·마이크론 등 메모리 반도체 기업들의 가파른 가격 인상이 '지속 가능하지 않다'고 공개 비판했다. AI 데이터센터 수요를 겨냥한 급격한 가격 인상이 장기적으로 생태계를 해칠 수 있다는 우려를 표명했다. TSMC의 이례적인 공개 발언이 글로벌 반도체 공급망 협력·경쟁 구도 변화를 시사한다는 분석이다.</p>
+      <div class="article-footer">
+        <span class="article-source">비즈니스포스트</span>
+        <a class="read-more" href="https://www.businesspost.co.kr/BP?command=article_view&num=439282" target="_blank">원문 읽기 →</a>
+      </div>
+    </div>
+
+    <div class="article-card">
+      <div class="article-title-row">
+        <span class="article-badge">③</span>
+        <h3 class="article-title">ASML, 흔들리지 않는 독점 지위 — 재무제표가 말하는 반도체 제국의 힘</h3>
+      </div>
+      <p class="article-summary">TSMC·삼성전자·인텔·SK하이닉스가 미래 생산능력 확보를 위해 ASML 장비를 수년 전부터 예약하고 있어 ASML의 장기 독점 수주 구조가 재조명됐다. EUV 노광장비 독점 공급자로서의 지위가 AI 반도체 투자 확대와 맞물려 더욱 강화되고 있다. 반도체 업체들의 ASML 의존도가 심화되면서 장비 공급망 다변화 논의도 활발해지고 있다.</p>
+      <div class="article-footer">
+        <span class="article-source">뉴스로드</span>
+        <a class="read-more" href="http://www.newsroad.co.kr/news/articleView.html?idxno=60018" target="_blank">원문 읽기 →</a>
+      </div>
+    </div>
+
+    <div class="article-card">
+      <div class="article-title-row">
+        <span class="article-badge">④</span>
+        <h3 class="article-title">엔비디아-한국 K산업계 동맹, HBM·기판·자율주행 전방위 확대</h3>
+      </div>
+      <p class="article-summary">젠슨 황 방한을 계기로 엔비디아와 한국 기업들의 밸류체인 협력이 HBM(고대역폭 메모리)을 넘어 기판, 냉각, 자율주행, 로봇 분야까지 전방위로 확대됐다. 삼성전자·SK하이닉스는 AI 메모리의 핵심 공급자로 자리매김하고 있으며, 현대차 등 제조업 전반도 엔비디아 AI 생태계에 편입됐다. 한국이 AI 반도체 물리 인프라의 핵심 거점으로 재부상하고 있다는 평가다.</p>
+      <div class="article-footer">
+        <span class="article-source">스포츠서울</span>
+        <a class="read-more" href="https://n.news.naver.com/mnews/article/468/0001245315?sid=101" target="_blank">원문 읽기 →</a>
+      </div>
+    </div>
+
+    <div class="article-card">
+      <div class="article-title-row">
+        <span class="article-badge">⑤</span>
+        <h3 class="article-title">AI 전력 수요 폭증, 데이터센터 냉각 기술 새 투자처로 부상</h3>
+      </div>
+      <p class="article-summary">AI 반도체(GPU·HBM) 전력 소비 급증으로 데이터센터 냉각 기술이 새로운 전략 투자처로 주목받고 있다. 한국 기업들은 칠러 등 냉각 솔루션 수주가 급증하며 2027년 냉각 부문 매출 1조 원 목표를 앞당기고 있다. AI 연산 확대에 따른 전력 인프라 재편이 반도체 설비투자와 함께 새로운 성장 축으로 자리잡고 있다.</p>
+      <div class="article-footer">
+        <span class="article-source">비바100</span>
+        <a class="read-more" href="https://www.viva100.com/article/20260606500167" target="_blank">원문 읽기 →</a>
+      </div>
+    </div>
+      <div class="trend-bar">📌 젠슨 황 방한과 엔비디아-한국 동맹 구체화로 AI 반도체 공급망에서 한국의 전략적 위상이 더욱 강화됐다.</div>
+    </div>
+  </div>
+
+    
+  <div class="tech-section" id="tech">
+    <div class="tech-badge">🔬 반도체 기술 해설</div>
+    <div class="tech-header">
+      <span class="topic-emoji">💡</span>
+      <span class="topic-title">이 주의 반도체 기술 해설</span>
+    </div>
+    <div class="tech-explainer">
+      <h3 class="tech-main-title">🔍 이번 주 주목 기술: HBM (High Bandwidth Memory, 고대역폭 메모리)</h3>
+<p class="tech-sub-title">한 줄 정의</p>
+<p class="tech-body">HBM은 여러 개의 D램 칩을 수직으로 쌓아 연결하고, 기존 메모리보다 훨씬 넓은 데이터 전송 통로를 제공하는 고성능 메모리 반도체다.</p>
+<p class="tech-sub-title">기술 개요</p>
+<p class="tech-body">기존 D램은 칩과 프로세서 사이를 좁은 버스(데이터 통로)로 연결해 전송 속도에 한계가 있었다. HBM은 D램 칩을 TSV(Through Silicon Via, 실리콘 관통 전극)라는 미세 구멍으로 수직 관통 연결해 한 번에 이동할 수 있는 데이터 양을 수십 배 늘렸다. 이렇게 수직으로 쌓은 메모리 스택을 GPU 옆에 인터포저(중간 기판)를 통해 물리적으로 붙여놓는 패키지 구조를 '2.5D 패키징'이라 한다. 현재 HBM3E가 양산 중이며, HBM4는 더 많은 칩을 쌓고 전송 속도를 한층 높인 차세대 규격으로 개발이 진행 중이다.</p>
+<p class="tech-sub-title">왜 주목받고 있나</p>
+<p class="tech-body">AI 모델 학습과 추론은 수백억 개의 파라미터를 반복 계산하는 과정으로, GPU가 처리하는 데이터를 빠르게 공급해 줄 고속 메모리가 필수다. 기존 GDDR 메모리로는 AI 연산 속도를 따라갈 수 없어, HBM이 AI 가속기(GPU·NPU)의 표준 메모리로 자리잡았다. 엔비디아의 H100·B100 시리즈를 비롯한 최신 AI 반도체가 모두 HBM을 탑재하고 있어 수요가 급증하고 있다.</p>
+<p class="tech-sub-title">반도체 종사자가 알아야 할 포인트</p>
+<p class="tech-body">제조 관점에서 HBM은 D램 공정 기술뿐 아니라 TSV 형성·다이 적층·패키지 본딩 등 후공정 기술 역량이 경쟁력을 좌우한다. 설계·소재 관점에서는 발열 관리(단위 면적당 전력 밀도 급증)와 신호 무결성 유지가 핵심 과제이며, 이를 해결하기 위한 냉각 소재·기판 기술 투자가 함께 확대되고 있다.</p>
+    </div>
+  </div>
+  </div>
+
+  <div class="footer">
+    <p>주간 HR 뉴스레터 &middot; 매주 월요일 발송</p>
+    <p>본 뉴스레터는 Claude AI가 글로벌 뉴스를 자동 수집·요약하여 제공합니다.</p>
+  </div>
+
+</div>
+</body>
+</html>
